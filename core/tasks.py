@@ -1,4 +1,5 @@
 from .models import Test
+from core import serializers as core_serializers
 from celery import shared_task
 from main import settings
 from django.core.mail import send_mail
@@ -36,10 +37,12 @@ def send_mail_on_post(self):
     return "Done"
 
 @shared_task(bind=True)
-def send_mail_on_put(self):
-    mail_subject = "Hi! Celery Testing for PUT API"
-    message = "POST Details successfully"
-    to_email = "vaibhav.chavda@digiqt.com"
+def send_mail_on_put(self, pk=None):
+    users = Test.objects.all()
+    for user in users:
+        mail_subject = "Hi! Celery Testing for PUT API"
+        message = "Data updated successfully"
+        to_email = user.email
     send_mail(
         subject = mail_subject,
         message= message,

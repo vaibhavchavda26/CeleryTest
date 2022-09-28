@@ -40,7 +40,7 @@ class SendEmail(views.APIView):
             return create_response("Data Added Successfully",200)
 
     def put(self,request,pk=None):
-        send_mail_on_put.delay()
+        send_mail_on_put.delay(pk)
         register_data = core_models.Test.objects.filter(id=pk).last()
         first_name = request.data.get("first_name")
         last_name = request.data.get("last_name")
